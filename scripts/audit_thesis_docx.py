@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Read-only structural audit for DOCX thesis files using OOXML."""
 
 from __future__ import annotations
