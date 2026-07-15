@@ -1,0 +1,7 @@
+interface:
+  display_name: "中文人文社科论文写作与统稿"
+  short_description: "统筹论证、概念、引文、语言与Word交付"
+  default_prompt: "Use $humanities-thesis-zh to diagnose and revise this Chinese humanities thesis while preserving its scope, argument, concepts, and citations."
+
+policy:
+  allow_implicit_invocation: true
