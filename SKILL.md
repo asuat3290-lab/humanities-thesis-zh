@@ -1,6 +1,6 @@
 ---
 name: humanities-thesis-zh
-description: Write, revise, audit, and finalize Chinese humanities and social-science theses, especially philosophy, intellectual history, social theory, and Marxist studies. Use for 论文提纲、章节写作、局部精修、全文统稿、概念边界、论证衔接、原始文本细读、脚注与参考文献核验、中文学术语言自然化、去除 AI 写作痕迹、Markdown/DOCX 合并与交付，以及涉及 Marx/MEGA² 的文本考证。Honor requests such as “只诊断”“先给方案”“不要重写”“只处理指定章节” and preserve the thesis's established argument unless the user explicitly authorizes restructuring.
+description: Write, revise, audit, and finalize Chinese humanities and social-science theses across philosophy, intellectual history, political theory, sociology, literature, education, law, and related fields. Use for 论文提纲、章节写作、局部精修、全文统稿、概念边界、论证衔接、原始文本细读、脚注与参考文献核验、中文学术语言自然化、去除 AI 写作痕迹及 Markdown/DOCX 合并与交付。Honor requests such as “只诊断”“先给方案”“不要重写”“只处理指定章节” and preserve the thesis's established argument unless the user explicitly authorizes restructuring.
 ---
 
 # 中文人文社科论文写作与统稿
@@ -48,7 +48,7 @@ description: Write, revise, audit, and finalize Chinese humanities and social-sc
 
 把材料分为原始文本、二手研究和现实材料。逐项记录每条材料能够支持的具体判断，避免一个脚注笼统支撑整段综合论述。新增或调整引文时核对版本、卷册、页码和上下文。
 
-涉及引文、脚注或参考文献时，读取 [references/evidence-and-citations.md](references/evidence-and-citations.md)。涉及马克思、MEGA² 或德文术语时，另读 [references/marx-mega-workflow.md](references/marx-mega-workflow.md)。
+涉及引文、脚注或参考文献时，读取 [references/evidence-and-citations.md](references/evidence-and-citations.md)。领域专用规则不得默认加载；只有研究对象明确匹配时才读取相应 profile。涉及马克思、MEGA² 或相关德文术语时，可选读取 [profiles/marx-mega/workflow.md](profiles/marx-mega/workflow.md)。
 
 ### 5. 按段落推进论证
 
@@ -80,11 +80,21 @@ description: Write, revise, audit, and finalize Chinese humanities and social-sc
 可先运行：
 
 ~~~powershell
-python scripts/audit_thesis_text.py thesis.md --marx-terms
+python scripts/audit_thesis_text.py thesis.md
 python scripts/audit_thesis_docx.py thesis.docx
 ~~~
 
+领域术语检查只在需要时显式加载配置，例如：
+
+~~~powershell
+python scripts/audit_thesis_text.py thesis.md --term-config profiles/marx-mega/terms.json
+~~~
+
 脚本只报告问题，不自动改文。查看 [references/document-delivery.md](references/document-delivery.md) 完成 Markdown、DOCX 与视觉核验。
+
+## 可选领域配置
+
+领域 profile 不改变默认工作流，也不参与无关任务。只有题目、材料或用户要求明确匹配时才加载。当前仓库提供 `profiles/marx-mega/` 作为可选示例；其他领域可按相同结构添加工作流和术语表。
 
 ## 与其他技能协作
 

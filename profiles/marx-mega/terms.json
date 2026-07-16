@@ -1,0 +1,45 @@
+{
+  "profile": "marx-mega",
+  "term_specs": [
+    {
+      "label": "异化劳动",
+      "pattern": "异化劳动",
+      "originals": ["entfremdete Arbeit", "entäußerte Arbeit", "alienated labour", "alienated labor"]
+    },
+    {
+      "label": "对象化",
+      "pattern": "对象化",
+      "originals": ["Vergegenständlichung", "objectification"]
+    },
+    {
+      "label": "物化",
+      "pattern": "物化",
+      "originals": ["Verdinglichung", "reification"]
+    },
+    {
+      "label": "拜物教",
+      "pattern": "拜物教",
+      "originals": ["Fetischismus", "fetishism"]
+    },
+    {
+      "label": "劳动一般",
+      "pattern": "劳动一般",
+      "originals": ["Arbeit überhaupt", "labour in general", "labor in general"]
+    },
+    {
+      "label": "抽象劳动",
+      "pattern": "抽象劳动",
+      "originals": ["abstrakte Arbeit", "abstract labour", "abstract labor"]
+    },
+    {
+      "label": "从属",
+      "pattern": "从属",
+      "originals": ["Subsumtion", "subsumption"]
+    },
+    {
+      "label": "一般智力",
+      "pattern": "一般智力",
+      "originals": ["general intellect", "allgemeiner Verstand"]
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 
 ### 简介
 
-`humanities-thesis-zh` 是面向中文人文社会科学论文的 Codex skill，适用于哲学、思想史、社会理论和马克思主义研究等领域。它将论文写作与修订拆分为论证、概念、证据、结构、语言和文档交付六个相互衔接的层面，尤其适合逐章打磨、全文统稿、原始文本细读、脚注核验以及中文学术表达自然化。
+`humanities-thesis-zh` 是面向中文人文社会科学论文的 Codex skill，适用于哲学、思想史、政治理论、社会学、文学、教育、法学及相关领域。它将论文写作与修订拆分为论证、概念、证据、结构、语言和文档交付六个相互衔接的层面，尤其适合逐章打磨、全文统稿、原始文本细读、脚注核验以及中文学术表达自然化。
 
 该 skill 不以自动扩写或表面润色替代理论判断。它优先服从用户限定的修改范围，保留已经成立的论证主线，并要求所有新增引文和文献能够得到核验。
 
@@ -15,7 +15,7 @@
 - 明确全文主线、章节功能及相邻章节的论证接口。
 - 识别概念滑移、首次界定缺失、对象泛化和术语不一致。
 - 区分原始文本、二手研究与现实材料，检查判断与证据的对应关系。
-- 支持马克思文本、MEGA² 卷册页码、德文术语和版本关系的审慎处理。
+- 支持原始文本版本、外语术语、译本差异和思想史语境的审慎处理。
 - 处理局部精修、章节写作、跨章去重、全文合并和结论收束。
 - 在逻辑与引文稳定后清理模板化转折、讲解腔、机械排比和其他 AI 写作痕迹。
 - 配合 Documents 工作流生成并检查 Markdown、DOCX、目录和真实 Word 脚注。
@@ -46,11 +46,21 @@
 ### 审查脚本
 
 ```powershell
-python scripts/audit_thesis_text.py thesis.md --marx-terms
+python scripts/audit_thesis_text.py thesis.md
 python scripts/audit_thesis_docx.py thesis.docx
 ```
 
 `audit_thesis_text.py` 检查 Markdown 或纯文本中的章节结构、Markdown 脚注、重复段落、模板句、加工痕迹及关键概念原词括注。`audit_thesis_docx.py` 直接读取 OOXML，检查 Word 目录、标题样式、真实脚注和残留标记。两者均只读运行。
+
+### 可选领域配置
+
+默认工作流不加载任何特定思想家或理论传统。`profiles/marx-mega/` 是可选领域示例，仅在任务明确涉及马克思或 MEGA² 时使用：
+
+```powershell
+python scripts/audit_thesis_text.py thesis.md --term-config profiles/marx-mega/terms.json
+```
+
+其他研究领域可以用同一配置格式维护自己的术语表，而不改变通用核心。
 
 ### 文件结构
 
@@ -62,8 +72,11 @@ references/
   document-delivery.md
   evidence-and-citations.md
   language-style-zh.md
-  marx-mega-workflow.md
   revision-workflow.md
+profiles/
+  marx-mega/
+    workflow.md
+    terms.json
 scripts/
   audit_thesis_text.py
   audit_thesis_docx.py
@@ -77,7 +90,7 @@ scripts/
 
 ### Overview
 
-`humanities-thesis-zh` is a Codex skill for writing, revising, auditing, and finalizing Chinese humanities and social-science theses, especially in philosophy, intellectual history, social theory, and Marxist studies. It treats argument, concepts, evidence, structure, language, and document delivery as connected but distinct layers of academic work.
+`humanities-thesis-zh` is a Codex skill for writing, revising, auditing, and finalizing Chinese humanities and social-science theses across philosophy, intellectual history, political theory, sociology, literature, education, law, and related fields. It treats argument, concepts, evidence, structure, language, and document delivery as connected but distinct layers of academic work.
 
 The skill is designed for chapter-by-chapter revision, full-manuscript integration, close reading of primary texts, footnote verification, and natural Chinese academic prose. It does not use automatic expansion or stylistic polishing as a substitute for theoretical judgment.
 
@@ -86,7 +99,7 @@ The skill is designed for chapter-by-chapter revision, full-manuscript integrati
 - Define the thesis spine, chapter functions, and interfaces between adjacent chapters.
 - Detect conceptual drift, missing first definitions, overextended objects of analysis, and inconsistent terminology.
 - Separate primary texts, secondary scholarship, and empirical materials while checking claim-evidence alignment.
-- Support cautious work with Marx, MEGA² volume and page references, German terminology, and textual versions.
+- Support cautious work with primary-text versions, foreign-language terminology, translation differences, and intellectual-historical contexts.
 - Revise locally, draft chapters, remove cross-chapter repetition, merge manuscripts, and tighten conclusions.
 - Remove formulaic transitions, lecture-like phrasing, mechanical parallelism, and other signs of AI-generated prose only after the logic and citations are stable.
 - Coordinate with a document workflow for Markdown, DOCX, tables of contents, and genuine Word footnotes.
@@ -117,11 +130,21 @@ Use $humanities-thesis-zh to audit this chapter's argument, concepts, citations,
 ### Audit Scripts
 
 ```powershell
-python scripts/audit_thesis_text.py thesis.md --marx-terms
+python scripts/audit_thesis_text.py thesis.md
 python scripts/audit_thesis_docx.py thesis.docx
 ```
 
 `audit_thesis_text.py` checks Markdown or plain text for heading structure, footnotes, repeated passages, formulaic phrasing, editing traces, and original-language annotations of key concepts. `audit_thesis_docx.py` reads OOXML directly to inspect Word tables of contents, heading styles, genuine footnotes, and leftover markers. Both scripts are read-only.
+
+### Optional Domain Profiles
+
+The default workflow does not load rules for any particular thinker or theoretical tradition. `profiles/marx-mega/` is an optional example and should only be used when the task explicitly concerns Marx or MEGA²:
+
+```powershell
+python scripts/audit_thesis_text.py thesis.md --term-config profiles/marx-mega/terms.json
+```
+
+Other fields can supply their own terminology configuration without changing the generic core.
 
 ### Privacy and Academic Integrity
 

@@ -31,16 +31,7 @@ TEMPLATES = {
     "并非A而是B": re.compile(r"并非[^。！？；\n]{0,45}而是"),
     "如果说A那么B": re.compile(r"如果说[^。！？；\n]{0,80}那么"),
 }
-TERMS = [
-    ("异化劳动", r"异化劳动", ["entfremdete Arbeit", "entäußerte Arbeit", "alienated labour", "alienated labor"]),
-    ("对象化", r"对象化", ["Vergegenständlichung", "objectification"]),
-    ("物化", r"物化", ["Verdinglichung", "reification"]),
-    ("拜物教", r"拜物教", ["Fetischismus", "fetishism"]),
-    ("劳动一般", r"劳动一般", ["Arbeit überhaupt", "labour in general", "labor in general"]),
-    ("抽象劳动", r"抽象劳动", ["abstrakte Arbeit", "abstract labour", "abstract labor"]),
-    ("从属", r"从属", ["Subsumtion", "subsumption"]),
-    ("一般智力", r"一般智力", ["general intellect", "allgemeiner Verstand"]),
-]
+DEFAULT_TERMS: list[tuple[str, str, list[str]]] = []
 
 
 @dataclass
@@ -228,11 +219,11 @@ def run(path: Path, check_terms: bool, config: Path | None):
     for item in notes["unused_definitions"][:20]:
         findings.append(Finding("footnote", "review", 0, f"脚注定义 [^{item}] 未被正文引用。"))
 
-    specs = TERMS
+    specs = DEFAULT_TERMS
     if config:
         data = json.loads(read_text(config))
-        specs = [(x["label"], x["pattern"], x["originals"]) for x in data.get("term_specs", [])] or specs
-    term_results = terminology_audit(text, specs) if check_terms else []
+        specs = [(x["label"], x["pattern"], x["originals"]) for x in data.get("term_specs", [])]
+    term_results = terminology_audit(text, specs) if check_terms and specs else []
     for item in term_results:
         if item["status"] == "review":
             findings.append(Finding("terminology", "review", item["first_line"],
@@ -292,14 +283,18 @@ def main():
     parser.add_argument("path", type=Path)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--strict", action="store_true")
-    parser.add_argument("--marx-terms", action="store_true")
-    parser.add_argument("--config", type=Path)
+    parser.add_argument("--term-config", "--config", dest="config", type=Path,
+                        help="可选 JSON 术语配置；未指定时不执行领域术语检查")
+    parser.add_argument("--marx-terms", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     if not args.path.is_file():
         parser.error("文件不存在：" + str(args.path))
-    if args.config and not args.config.is_file():
-        parser.error("配置文件不存在：" + str(args.config))
-    report = run(args.path, args.marx_terms, args.config)
+    config = args.config
+    if args.marx_terms and config is None:
+        config = Path(__file__).resolve().parent.parent / "profiles" / "marx-mega" / "terms.json"
+    if config and not config.is_file():
+        parser.error("配置文件不存在：" + str(config))
+    report = run(args.path, bool(config), config)
     print(json.dumps(report, ensure_ascii=False, indent=2)) if args.json else print_report(report)
     errors = [x for x in report["findings"] if x["severity"] == "error"]
     return 2 if args.strict and errors else 0
